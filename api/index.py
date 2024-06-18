@@ -6,6 +6,7 @@ from sklearn.neighbors import KNeighborsRegressor
 import pandas as pd 
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
 import os
+import boto3
 
 app = Flask(__name__)
 CORS(app) 
@@ -75,3 +76,6 @@ def return_home():
 @app.route('/about')
 def about():
     return 'About'
+
+if __name__ == "__main__":
+    app.run(port=8000) 
