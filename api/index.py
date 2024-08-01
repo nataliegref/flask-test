@@ -1,12 +1,11 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 
-# import pickle
-# # from sklearn.neighbors import KNeighborsRegressor
-# import pandas as pd 
-# # from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
-# # import os
-# # import boto3
+# from sklearn.neighbors import KNeighborsRegressor
+import pandas as pd 
+# from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
+# import os
+# import boto3
 
 # from scipy.stats import t
 
@@ -25,10 +24,8 @@ def run_average_model():
        'Size', 'Fraction']
     data = {0:[0,0,0,0,1,1000,0.9]}
 
-    # df = pd.DataFrame.from_dict(data, orient='index', columns=columns)
-    # predictions = data['Size']
-
-    predictions = data[0]
+    df = pd.DataFrame.from_dict(data, orient='index', columns=columns)
+    predictions = data['Size']
 
     # predictions = model.predict(df)
     return predictions[0]
