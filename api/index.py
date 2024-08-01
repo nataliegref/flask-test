@@ -7,11 +7,11 @@ import pandas as pd
 # import os
 # import boto3
 
-# from scipy.stats import t
+from scipy.stats import t
 
-# from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error
 
-# from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression
 
 app = Flask(__name__)
 CORS(app) 
