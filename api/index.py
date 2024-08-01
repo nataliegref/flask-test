@@ -25,7 +25,7 @@ def run_average_model():
     data = {0:[0,0,0,0,1,1000,0.9]}
 
     df = pd.DataFrame.from_dict(data, orient='index', columns=columns)
-    predictions = data['Size']
+    predictions = df['Size']
 
     # predictions = model.predict(df)
     return predictions[0]
