@@ -38,6 +38,5 @@ def return_home():
 def about():
     return 'About'
 
-#test
 if __name__ == "__main__":
     app.run(port=8000) 
