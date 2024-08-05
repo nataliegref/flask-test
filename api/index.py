@@ -1,17 +1,10 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 
-# from sklearn.neighbors import KNeighborsRegressor
 import pandas as pd 
-# from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
-# import os
-# import boto3
+# from scipy.stats import t
 
-from scipy.stats import t
-
-from sklearn.metrics import mean_squared_error
-
-# from sklearn.linear_model import LinearRegression
+# from sklearn.metrics import mean_squared_error
 
 app = Flask(__name__)
 CORS(app) 
