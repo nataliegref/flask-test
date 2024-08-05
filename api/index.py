@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from flask_cors import CORS
+# from flask_cors import CORS
 
 import pandas as pd 
 # from scipy.stats import t
@@ -7,7 +7,7 @@ import pandas as pd
 # from sklearn.metrics import mean_squared_error
 
 app = Flask(__name__)
-CORS(app) 
+# CORS(app) 
 
 
 def run_average_model():
