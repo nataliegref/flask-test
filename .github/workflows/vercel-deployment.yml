@@ -1,0 +1,94 @@
+name: Vercel
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    name: Deployment
+    environment: Production
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Build project
+        run: vercel build --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Reduce deployment size
+        run: |
+          python3 - <<EOF
+          import json
+          import os
+          import shutil
+
+          # Open the JSON file .vercel/output/functions/api/index.func/.vc-config.json in read/write mode
+          with open(".vercel/output/functions/api/index.func/.vc-config.json", "r+", encoding="utf-8") as file:
+              data = json.load(file)
+
+              # Function to determine if a path should be deleted
+              def should_delete(path):
+                  conditions = [
+                      path == ".gitignore",
+                      path.startswith(".git/"),
+                      path.startswith(".github/"),
+                      path.startswith("bin/"),
+                      path.startswith("dotenv/"),
+                      path.split('/')[0].endswith("dist-info"),
+                      any(part == "__model__" for part in path.split('/')),
+                      any(part == "__pycache__" for part in path.split('/')),
+                      any(part == "datasets" for part in path.split('/')),
+                      any(part == "test" for part in path.split('/')),
+                      any(part == "tests" for part in path.split('/')),
+                  ]
+                  return any(conditions)
+
+              # List to store paths to be deleted
+              paths_to_delete = [key for key in data["filePathMap"].keys() if should_delete(key)]
+
+              # Filter filePathMap by removing entries that meet any of the conditions
+              filtered_filePathMap = {
+                  key: value for key, value in data["filePathMap"].items() if not should_delete(key)
+              }
+
+              # Update the data with the filtered filePathMap
+              data["filePathMap"] = filtered_filePathMap
+
+              # Move the file pointer to the beginning of the file
+              file.seek(0)
+
+              # Write the filtered JSON back to the file .vercel/output/functions/api/index.func/.vc-config.json
+              json.dump(data, file, indent=2)
+
+              # Truncate the file to remove any remaining data
+              file.truncate()
+
+              # Delete the files corresponding to the discarded paths
+              for path in paths_to_delete:
+                  os.remove(path)
+                  try:
+                      dir_path = os.path.dirname(path)
+                      os.rmdir(dir_path)
+                  except OSError:
+                      pass  # directory not empty
+
+              # Delete the build artifacts
+              shutil.rmtree('.git')
+              shutil.rmtree('.github')
+              shutil.rmtree('.vercel')
+              os.remove('README.md')
+              os.remove('requirements.txt')
+          EOF
+
+      - name: Deploy to Vercel
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
