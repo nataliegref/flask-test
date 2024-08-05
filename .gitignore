@@ -15,5 +15,6 @@ ENV/
 env.bak/ 
 venv.bak/ 
 .local
+.env.development.local
 
 .DS_Store
