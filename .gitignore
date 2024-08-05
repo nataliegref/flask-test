@@ -1,6 +1,9 @@
 .vercel
 *.log
 *.pyc
+*.log
+*.joblib
+*.pkl
 __pycache__
 
 # Environments 
@@ -11,5 +14,6 @@ venv/
 ENV/ 
 env.bak/ 
 venv.bak/ 
+.local
 
 .DS_Store
