@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-# from flask_cors import CORS
+from flask_cors import CORS
 
 import pandas as pd 
 # from scipy.stats import t
@@ -9,6 +9,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
 
 app = Flask(__name__)
+CORS(app)
 
 def insert_missing_days(df):
     full_time_index = pd.date_range(start=df.index.min(), end=df.index.max(), freq='15min')
