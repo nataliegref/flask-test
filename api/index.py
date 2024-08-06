@@ -9,8 +9,8 @@ from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
 
 app = Flask(__name__)
-CORS(app)
-# CORS(app, resources={r"/model": {"origins": "http://localhost:3000"}}) # add address for production
+# CORS(app)
+CORS(app, resources={r"/model": {"origins": "http://localhost:3000"}}) # add address for production
 
 def insert_missing_days(df):
     full_time_index = pd.date_range(start=df.index.min(), end=df.index.max(), freq='15min')
