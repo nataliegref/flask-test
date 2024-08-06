@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask_cors import CORS 
 
 import pandas as pd 
-# from scipy.stats import t
+from scipy.stats import t
 import numpy as np
 
 from sklearn.metrics import mean_squared_error
@@ -10,6 +10,7 @@ from sklearn.linear_model import LinearRegression
 
 app = Flask(__name__)
 CORS(app)
+# CORS(app, resources={r"/model": {"origins": "http://localhost:3000"}}) # add address for production
 
 def insert_missing_days(df):
     full_time_index = pd.date_range(start=df.index.min(), end=df.index.max(), freq='15min')
@@ -114,10 +115,10 @@ def calculate_confidence(residuals, predictions, lengthX, confidence_level = 0.9
 
     std_error = np.std(residuals)
 
-    # alpha = 1 - confidence_level
-    # dof = lengthX - 1  # degrees of freedom
-    # t_stat = t.ppf(1 - alpha/2, dof)
-    t_stat = 1.96 #approximation
+    alpha = 1 - confidence_level
+    dof = lengthX - 1  # degrees of freedom
+    t_stat = t.ppf(1 - alpha/2, dof)
+    # t_stat = 1.96 #approximation
 
     lower_bound = predictions - t_stat * std_error
     upper_bound = predictions + t_stat * std_error
